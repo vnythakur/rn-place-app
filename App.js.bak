@@ -1,0 +1,61 @@
+import React, {useState} from 'react';
+import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+
+import { useSelector, useDispatch } from "react-redux";
+
+import PlaceDetail from './src/components/PlaceDetail/PlaceDetail';
+
+import PlaceInput from './src/components/PlaceInput/PlaceInput';
+import PlaceList from "./src/components/PlaceList/PlaceList";
+
+import { addPlace, deletePlace, deselectPlace, selectPlace } from "./src/store/actions/index";
+
+// import beautifulPlace from './src/assets/beautiful-place.jpg';
+
+
+const app = () => {
+
+  const placeList = useSelector(state => state.places.placeList);
+  const selectedPlace = useSelector(state => state.places.selectedPlace);
+
+  const dispatch = useDispatch();
+
+  onPlaceAdd = (place) => {
+    dispatch(addPlace(place));
+  }
+
+  onPlaceDelete = () => {
+    dispatch(deletePlace());
+  }
+  
+  onPlaceSelect = (id) => {
+    dispatch(selectPlace(id));
+  }
+
+  clearSelectedPlace = () => {
+    dispatch(deselectPlace());
+  }
+
+  return (
+    <View style={styles.container}>
+
+      <PlaceDetail selectedPlace={selectedPlace} onClose={clearSelectedPlace} onDelete={() => onPlaceDelete()} />
+
+      <PlaceInput addPlace={onPlaceAdd} />
+      
+      <PlaceList places={placeList} selectPlace={onPlaceSelect} />
+        
+      
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    paddingTop: 16
+  },
+})
+
+export default app;
